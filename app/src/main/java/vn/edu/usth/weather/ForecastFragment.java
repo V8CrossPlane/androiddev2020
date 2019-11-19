@@ -13,6 +13,8 @@ import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.ScrollView;
+import java.util.Random;
 
 
 public class ForecastFragment extends Fragment {
@@ -21,32 +23,47 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        TextView day_text = new TextView(getActivity());
-        day_text.setText("Thursday");
-        day_text.setBackgroundColor(0xffffff);
-        day_text.setPadding(0, 10, 0, 10);
+        ScrollView scrollView = (ScrollView) inflater.inflate(R.layout.fragment_forecast, container, false);
+        LinearLayout linearLayout = scrollView.findViewById(R.id.weather);
+        LinearLayout row;
+        TextView txt;
+        ImageView icon;
+        TextView weather_txt;
 
-        ImageView weatherIcon = new ImageView(getActivity());
-        weatherIcon.setImageResource(R.drawable.rain);
-        weatherIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        weatherIcon.setScaleX((float) 0.5);
-        weatherIcon.setScaleY((float) 0.5);
-        weatherIcon.setAdjustViewBounds(true);
-        weatherIcon.setBackgroundColor(0x0000ffff);
 
-        RelativeLayout.LayoutParams textViewParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        textViewParam.addRule(RelativeLayout.CENTER_IN_PARENT);
-        RelativeLayout.LayoutParams imageViewParam = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        String days[] = {"Mon", "Tue", "Wed", "Thurs", "Fri", "Sat", "Sun"};
+        String weather[] = {"Rain", "Sunny", "Heavy Rain", "Cloudy"};
 
-        View v = inflater.inflate(R.layout.fragment_forecast, container, false);
-        v.setBackgroundColor(0x3385ff);
-        LinearLayout linearLayout = v.findViewById(R.id.linearLayout);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setGravity(Gravity.CENTER);
-        linearLayout.addView(day_text, textViewParam);
-        linearLayout.addView(weatherIcon, imageViewParam);
+        Random r = new Random();
+        int a;
 
-        return v;
+        for(int i = 0; i < 20; i ++) {
+            row = (LinearLayout) inflater.inflate(R.layout.row, container, false);
+
+            txt = row.findViewById(R.id.txt_day);
+            icon = row.findViewById(R.id.icon);
+            weather_txt = row.findViewById(R.id.weather_txt);
+
+            a = r.nextInt(50);
+            txt.setText(days[i % 7]);
+            weather_txt.setText(weather[a % 4]);
+            switch (a % 4) {
+                case 0:
+                    icon.setImageResource(R.drawable.rain);
+                    break;
+                case 1:
+                    icon.setImageResource(R.drawable.sunny);
+                    break;
+                case 2:
+                    icon.setImageResource(R.drawable.thunderstorm);
+                    break;
+                case 3:
+                    icon.setImageResource(R.drawable.cloudy);
+                    break;
+            }
+            linearLayout.addView(row);
+        }
+        return scrollView;
     }
 
 }
