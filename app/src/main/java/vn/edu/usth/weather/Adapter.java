@@ -26,4 +26,18 @@ public class Adapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() { return 3; }
+
+    @Override
+    public CharSequence getPageTitle(int position){
+        switch (position){
+            case 0:
+                return "HaNoi";
+            case 1:
+                return "NewYork";
+            case 2:
+                return "London";
+            default:
+                return "Somewhere";
+        }
+    }
 }

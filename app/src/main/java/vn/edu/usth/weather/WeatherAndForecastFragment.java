@@ -4,16 +4,14 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
+import android.widget.TextView;
+import com.google.android.material.tabs.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class WeatherAndForecastFragment extends Fragment {
 
 
@@ -28,6 +26,7 @@ public class WeatherAndForecastFragment extends Fragment {
 
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         WeatherFragment weatherFragment = new WeatherFragment();
+        weatherFragment.setArguments(this.getArguments());
         ForecastFragment forecastFragment = new ForecastFragment();
 
         fragmentTransaction.replace(R.id.fragment_weather, weatherFragment);
@@ -39,8 +38,10 @@ public class WeatherAndForecastFragment extends Fragment {
         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
         fragmentTransaction.commit();
+        LinearLayout fragment_weather = (LinearLayout) inflater.inflate(R.layout.fragment_weather_and_forecast, container, false);
 
-        return inflater.inflate(R.layout.fragment_weather_and_forecast, container, false);
+
+        return fragment_weather;
     }
 
 }
