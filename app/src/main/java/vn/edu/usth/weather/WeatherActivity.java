@@ -18,7 +18,7 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
         Log.i("Create", "Call Create");
         viewPager = findViewById(R.id.pager);
-        adapter = new Adapter(getSupportFragmentManager());
+        adapter = new Adapter(getSupportFragmentManager(), this.getApplicationContext());
         viewPager.setAdapter(adapter);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);

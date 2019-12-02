@@ -1,7 +1,7 @@
 package vn.edu.usth.weather;
 
 import android.os.Bundle;
-
+import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -9,8 +9,11 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class Adapter extends FragmentPagerAdapter {
 
-    public Adapter(FragmentManager fm) {
+    Context context;
+
+    public Adapter(FragmentManager fm, Context nContext) {
         super(fm);
+        context = nContext;
     }
 
     @NonNull
@@ -31,11 +34,11 @@ public class Adapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position){
         switch (position){
             case 0:
-                return "HaNoi";
+                return context.getResources().getString(R.string.location_hanoi);
             case 1:
-                return "NewYork";
+                return context.getResources().getString(R.string.location_newyork);
             case 2:
-                return "London";
+                return context.getResources().getString(R.string.location_london);
             default:
                 return "Somewhere";
         }
