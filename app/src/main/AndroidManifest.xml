@@ -6,6 +6,11 @@
         android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission
         android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
 
         android:allowBackup="true"
@@ -15,6 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".PrefActivity"
+            android:parentActivityName=".WeatherActivity"></activity>
 
         <activity android:name=".WeatherActivity">
             <intent-filter>

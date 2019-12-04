@@ -5,15 +5,36 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import com.google.android.material.tabs.TabLayout;
+import android.media.MediaPlayer;
+import android.os.Environment;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import android.content.Intent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.Toast;
+import java.util.zip.Inflater;
 
 public class WeatherActivity extends AppCompatActivity {
     private static final String TAG = "Weather Activity";
     private ViewPager viewPager;
     private Adapter adapter;
     private TabLayout tabLayout;
+    private File myFile;
+    private String filename = "background.mp3";
+    private String filepath;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
+        filepath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/vn.edu.usth.weather/";
+        Log.i("MP3 Image path File: ", filepath);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         Log.i("Create", "Call Create");
@@ -22,6 +43,90 @@ public class WeatherActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+        ForecastFragment forecastFragment = new ForecastFragment();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.container, forecastFragment).commit();
+
+
+
+        writeExternal();
+        readFromExternal();
+
+    }
+
+    private void writeExternal() {
+        try {
+            InputStream is = getApplicationContext().getResources().openRawResource(R.raw.lover);
+            myFile = new File(filepath + filename);
+            myFile.createNewFile();
+            OutputStream fout = new FileOutputStream(myFile);
+            byte[] buffer = new byte[1024];
+            while (true) {
+                int bytesRead = is.read(buffer);
+                if (bytesRead == -1)
+                    break;
+                fout.write(buffer, 0, bytesRead);
+            }
+            fout.close();
+            is.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.app_bar_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.refresh_button:
+                this.recreate();
+                break;
+            case R.id.triple_dots_button:
+                View triple_dot_view = findViewById(R.id.triple_dots_button);
+                PopupMenu popupMenu = new PopupMenu(this, triple_dot_view);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()){
+                            case R.id.settings:
+                                Intent intent = new Intent(getApplicationContext(), PrefActivity.class);
+                                startActivity(intent);
+                                return true;
+                            case R.id.something:
+                                Toast.makeText(getApplicationContext(), "something is something is doing something here", Toast.LENGTH_LONG).show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+
+                });
+                popupMenu.inflate(R.menu.popup_menu);
+                popupMenu.show();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    private void readFromExternal() {
+        try {
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(filepath + filename);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     @Override
     protected void onStart() {

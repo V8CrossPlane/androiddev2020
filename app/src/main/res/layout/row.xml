@@ -17,11 +17,11 @@
         android:layout_width="0px"
         android:layout_height="@dimen/image_view_layout_height"
         android:id="@+id/icon"
-        android:layout_weight="1"/>
+        android:layout_weight="4"/>
     <TextView
         android:layout_width="0px"
         android:layout_height="wrap_content"
         android:id="@+id/weather_txt"
-        android:layout_weight="3" />
+        android:layout_weight="1" />
 
 </LinearLayout>
