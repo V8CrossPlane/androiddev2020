@@ -14,7 +14,11 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 
+import android.os.AsyncTask;
 
 
 public class WeatherActivity extends AppCompatActivity {
@@ -22,6 +26,15 @@ public class WeatherActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private Adapter adapter;
     private TabLayout tabLayout;
+
+    private final Handler networkHandler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            String content = msg.getData().getString("server_response");
+            Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +61,27 @@ public class WeatherActivity extends AppCompatActivity {
         public boolean onOptionsItemSelected(MenuItem item){
             switch (item.getItemId()){
                 case R.id.refresh_button:
-                    this.recreate();
+                    AsyncTask<String, Integer, String> task = new AsyncTask<String, Integer, String>() {
+                        @Override
+                        protected String doInBackground(String... strings) {
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e){
+                                e.printStackTrace();
+                            }
+                            return "Updated";
+                        }
+                        @Override
+                        protected void onPreExecute() {
+                            Toast.makeText(getApplicationContext(), "preparing for refresh", Toast.LENGTH_LONG);
+                        }
+                        @Override
+                        protected void onPostExecute(String content) {
+                            Toast.makeText(getApplicationContext(), content, Toast.LENGTH_LONG).show();
+                        }
+                            };
+                    task.execute("some useless url");
+
                     break;
                 case R.id.triple_dots_button:
                     View triple_dot_view = findViewById(R.id.triple_dots_button);
